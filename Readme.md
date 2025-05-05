@@ -1,38 +1,39 @@
 # 🤖 JobHunterAI
-
 ## Bot Discord d'aide à la recherche d'emploi et d'alternance
-
 ![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
 ![Python](https://img.shields.io/badge/Python-3.10+-green.svg)
 ![License](https://img.shields.io/badge/license-MIT-orange.svg)
 
 <div align="center">
-  <img src="/api/placeholder/800/400" alt="JobHunterAI Logo" />
-  <p><em>Projet académique — Master 1 DS2E — Université de Strasbourg</em></p>
+
+  <p><em>Projet académique — Master 1 DS2E — Faculté des sciences économiques et de gestion de Strasbourg</em></p>
+  
+  <img src="assets/images/fseg_logo.png" alt="Logo Faculté des Sciences Économiques et de Gestion" width="400"/>
 </div>
 
 ## 📋 Table des matières
 
 - [Présentation du projet](#-présentation-du-projet)
 - [Fonctionnalités principales](#-fonctionnalités-principales)
-- [Architecture du projet](#architecture-du-projet)
+- [Architecture du projet](#-architecture-du-projet)
 - [Installation et configuration](#-installation-et-configuration)
 - [Guide d'utilisation](#-guide-dutilisation)
-  - [Rechercher des offres d'emploi (`/scrape`)](#rechercher-des-offres-demploi-scrape)
-  - [Analyser un CV PDF (`/analyser_cv`)](#analyser-un-cv-pdf-analyser_cv)
-  - [Comparer le CV avec une offre (`/comparer_cv_offre`)](#comparer-le-cv-avec-une-offre-comparer_cv_offre)
-  - [Générer une lettre de motivation (`/generer_lettre`)](#générer-une-lettre-de-motivation-generer_lettre)
-- [Captures d'écran](#-captures-décran)
-- [Choix techniques et bonnes pratiques](#choix-techniques-et-bonnes-pratiques)
+  - [Rechercher des offres d'emploi (`/scrape`)](#rechercher-des-offres-demploi-chercher_emploi)
+  - [Rechercher des stages (`/scrape_stage`)](#rechercher-des-stages-scrape_stage)
+  - [Télécharger et analyser un CV (`/telecharger_cv`)](#télécharger-et-analyser-un-cv-telecharger_cv)
+  - [Analyser la compatibilité CV/offre (`/analyser_cv_offre`)](#analyser-la-compatibilité-cvoffre-analyser_cv_offre)
+  - [Ajouter des informations pour la lettre (`/infos_lettre_g5`)](#ajouter-des-informations-pour-la-lettre-infos_lettre_g5)
+  - [Générer une lettre de motivation (`/generer_lettre_g5`)](#générer-une-lettre-de-motivation-generer_lettre)
+- [Choix techniques et bonnes pratiques](#-choix-techniques-et-bonnes-pratiques)
 - [Équipe et contributions](#-équipe-et-contributions)
 - [Perspectives d'évolution](#-perspectives-dévolution)
 - [Licence](#-licence)
 
 ## 🚀 Présentation du projet
 
-JobHunterAI est un bot Discord académique développé dans le cadre du Master 1 DS2E (Data science pour l'économie et l'entreprise du futur) à l'Université de Strasbourg. Ce projet innovant vise à faciliter le processus de recherche d'emploi et d'alternance pour les étudiants en automatisant plusieurs étapes clés:
+JobHunterAI est un bot Discord académique développé dans le cadre du Master 1 DS2E (Data science pour l'économie et l'entreprise du futur) à la Faculté des sciences économiques et de gestion de Strasbourg. Ce projet innovant vise à faciliter le processus de recherche d'emploi et d'alternance pour les étudiants en automatisant plusieurs étapes clés:
 
-- Recherche d'offres pertinentes en ligne
+- Recherche d'offres pertinentes en ligne depuis multiples sources (France Travail, Indeed)
 - Analyse de CV au format PDF
 - Évaluation de l'adéquation entre profil et offre d'emploi
 - Génération de lettres de motivation personnalisées
@@ -42,25 +43,24 @@ L'intégration dans Discord permet une accessibilité immédiate et une utilisat
 ## 🔍 Fonctionnalités principales
 
 ### 1️⃣ Recherche d'offres d'emploi et d'alternance
-Grâce à la commande `/scrape`, le bot interroge différentes sources en ligne (principalement France Travail et Indeed) pour trouver des offres correspondant aux critères spécifiés:
+Grâce aux commandes `/scrape` et `/scrape_stage`, le bot interroge différentes sources en ligne pour trouver des offres correspondant aux critères spécifiés:
 - Métier ou titre de poste recherché
-- Compétences requises
 - Localisation géographique
-- Type de contrat (CDI, alternance, etc.)
+- Type de contrat (CDI, alternance, stage)
 
-Les résultats sont présentés directement dans Discord avec toutes les informations essentielles: titre du poste, entreprise, lieu et lien vers l'annonce complète.
+Les résultats sont présentés directement dans Discord avec toutes les informations essentielles: titre du poste, entreprise, lieu et lien vers l'annonce complète. Le bot combine les résultats de France Travail et d'Indeed pour une couverture optimale du marché.
 
 ### 2️⃣ Analyse automatique de CV (PDF)
-La commande `/analyser_cv` permet de soumettre un CV au format PDF pour analyse. Le bot:
+La commande `/telecharger_cv` suivie de l'utilisation des commandes d'extraction (`/extraire_cv_mistral`, `/extraire_cv_gemini`) permet de soumettre un CV au format PDF pour analyse. Le bot:
 - Extrait le contenu textuel du document
 - Identifie automatiquement les sections clés (formation, expériences, compétences)
 - Organise les informations dans une structure cohérente
 - Produit un résumé clair et structuré du profil professionnel
 
-Cette fonctionnalité s'appuie sur des technologies avancées d'extraction de texte (PyPDF2) et d'analyse sémantique (Large Language Models).
+Cette fonctionnalité s'appuie sur des technologies avancées d'extraction de texte et d'analyse sémantique grâce à des modèles de langage (Mistral, Gemini).
 
 ### 3️⃣ Matching CV ↔ Offre d'emploi
-Via la commande `/comparer_cv_offre`, l'utilisateur peut évaluer l'adéquation entre son profil et une offre sélectionnée. L'analyse fournit:
+Via les commandes `/comparer_cv_offre` ou `/analyser_cv_offre`, l'utilisateur peut évaluer l'adéquation entre son profil et une offre sélectionnée. L'analyse fournit:
 - Un pourcentage de correspondance global
 - Les points forts de la candidature
 - Les compétences ou expériences manquantes
@@ -69,7 +69,7 @@ Via la commande `/comparer_cv_offre`, l'utilisateur peut évaluer l'adéquation 
 Cette évaluation aide à prioriser les candidatures et à identifier les points à renforcer dans le CV ou à mettre en avant lors d'un entretien.
 
 ### 4️⃣ Génération de lettre de motivation personnalisée
-La commande `/generer_lettre` produit automatiquement une lettre de motivation adaptée au profil du candidat et à l'offre visée. La lettre:
+Les commandes `/generer_lettre` et `/generer_lettre_g5` produisent automatiquement une lettre de motivation adaptée au profil du candidat et à l'offre visée. La commande `/infos_lettre_g5` permet d'ajouter des informations supplémentaires pour personnaliser davantage la lettre. Celle-ci:
 - Mentionne explicitement l'entreprise et le poste
 - Met en avant les compétences pertinentes du candidat
 - Établit des liens entre le parcours et les besoins de l'entreprise
@@ -82,7 +82,7 @@ Le document généré est immédiatement téléchargeable et peut servir de base
 Le projet est structuré en cinq modules principaux, chacun développé par un groupe d'étudiants distinct, puis intégrés en une solution cohérente:
 
 ### 🔸 Groupe 1 — Intégration Discord & Interface
-**Fichier principal**: `bot.py`
+**Fichiers principaux**: `bot.py`, `scrape_jobs.py`,`scrape_stages.py`, `extract_cv.py`, `parse_cv_commands.py`, `mistral_utils.py`, `gemini_utils.py`, `partieLLM_discord.py`
 
 Ce module central assure:
 - L'initialisation du bot Discord via la bibliothèque `discord.py`
@@ -94,40 +94,41 @@ Ce module central assure:
 Le groupe 1 a joué un rôle d'orchestrateur, veillant à l'harmonie entre les différentes fonctionnalités et à la fluidité des interactions.
 
 ### 🔸 Groupe 2 — Scraping d'offres (France Travail)
-**Fichiers**: `scraping_group2.py`, `scrape_jobs.py`
+**Fichiers principaux**: `scraping_group2.py`
 
 Ce module spécialisé dans la collecte d'offres d'emploi sur France Travail:
 - Formule des requêtes de recherche paramétrées selon les critères utilisateur
+- Exploite l'API officielle de France Travail avec authentification
 - Extrait les informations pertinentes de chaque annonce (titre, entreprise, lieu)
 - Gère la pagination et le volume de résultats
 - Nettoie et standardise les données avant affichage
 
-L'intégration via `scrape_jobs.py` transforme ces données brutes en affichage interactif dans Discord.
+L'intégration avec le module principal transforme ces données brutes en affichage interactif dans Discord.
 
 ### 🔸 Groupe 3 — Scraping d'offres (Indeed)
-**Fichier**: `Code_g3.py`
+**Fichiers principaux**: `Code_g3.py`, `Code Webscrapping de stages.ipynb`, `scrape_jobs_g3.py`, `scrape_stages.py`
 
 Complémentaire au groupe 2, ce module:
-- Collecte des offres sur Indeed.fr, particulièrement pour les alternances
+- Collecte des offres sur Indeed.fr, particulièrement pour les alternances et stages
 - Utilise la bibliothèque `python-jobspy` pour optimiser les requêtes
-- Permet l'analyse statistique des offres (tendances par secteur, localisation)
-- Offre la possibilité d'exporter les données en CSV/JSON
+- Permet des recherches spécifiques pour les stages via la commande `/scrape_stage`
+- Fournit des résultats avec URLs fonctionnelles vers les offres originales
 
 Cette diversification des sources enrichit la pertinence des résultats proposés aux utilisateurs.
 
 ### 🔸 Groupe 4 — Parsing de CV PDF
-**Fichiers**: `CV_Parser_Mistral_Discord.py`, `Gemini_CV_parser.py`, `extract_cv.py`
+**Fichiers principaux**: `extract_cv.py`, `parse_cv_commands.py`, `CV_Parser_Mistral_Discord.py`, `Gemini_CV_parser.py` 
 
 Ce composant sophistiqué prend en charge l'analyse des CV:
-- Extraction du texte brut depuis les fichiers PDF (PyPDF2)
+- Extraction du texte brut depuis les fichiers PDF
 - Analyse sémantique via Large Language Models (Mistral AI ou Google Gemini)
 - Identification structurée des informations clés (compétences, expériences, formation)
-- Production d'un JSON normalisé représentant le profil professionnel
+- Production d'un format normalisé (fichier json) représentant le profil professionnel
 
 L'approche par IA garantit une flexibilité face à la diversité des formats de CV tout en maintenant une qualité d'extraction élevée.
 
 ### 🔸 Groupe 5 — Matching CV ↔ Offre & Génération de lettre
-**Fichiers**: `PartieLLM.py`, `match_cv_offer.py`, `generate_cover_letter.py`
+**Fichiers principaux**: `partieLLM.py`, `partieLLM_discord.py`, `match_cv_offer.py`, `generate_cover_letter.py`
 
 Ce dernier module exploite les technologies LLM pour deux tâches critiques:
 1. **Évaluation d'adéquation**: analyse comparative entre le CV et l'offre
@@ -136,10 +137,10 @@ Ce dernier module exploite les technologies LLM pour deux tâches critiques:
    - Recommandations personnalisées
 2. **Génération de lettre**: rédaction automatique d'une lettre de motivation
    - Adaptation au profil et à l'offre spécifique
+   - Intégration d'informations supplémentaires fournies par l'utilisateur
    - Structure professionnelle et ton approprié
-   - Mise en forme exportable
 
-Le module utilise des prompts sophistiqués pour obtenir des résultats de haute qualité via les API de modèles de langage.
+Le module utilise des prompts sophistiqués pour obtenir des résultats de haute qualité via l'API Google Gemini.
 
 Cette architecture modulaire favorise la maintenance, l'évolutivité et la collaboration entre équipes de développement.
 
@@ -148,7 +149,7 @@ Cette architecture modulaire favorise la maintenance, l'évolutivité et la coll
 ### Prérequis
 - Python 3.10 ou supérieur
 - Un compte Discord
-- (Optionnel) Clés API pour Mistral AI et/ou Google Generative AI
+- Clés API pour France Travail, Mistral et Google Generative AI (Gemini)
 
 ### Étapes d'installation
 
@@ -176,26 +177,36 @@ pip install -r requirements.txt
 Créez un fichier `.env` à la racine du projet avec les informations suivantes:
 
 ```
-# Obligatoire
+# DISCORD
 DISCORD_TOKEN=votre_token_discord
 
-# Optionnel (pour fonctionnalités avancées)
-MISTRAL_API_KEY=votre_clé_mistral_ai
-GOOGLE_API_KEY=votre_clé_google_generative_ai
+# FRANCE TRAVAIL
+FT_CLIENT_ID=votre_ft_client_id
+FT_CLIENT_SECRET=votre_ft_client_secret
+
+#GEMINI ET MISTRAL 
+GEMINI_API_KEY=votre_clé_google_generative_ai
+MISTRAL_API_KEY=votre_clé_mistral
+
 ```
 
-#### 5. Configurer l'application Discord
+#### 5. Configurer France Travail API (Groupe 2)
+1. Créez un compte sur [France Travail I/O](https://francetravail.io/)
+2. Créez une application pour obtenir un Client ID et un Client Secret
+3. Remplacez les identifiants dans `scraping_group2.py`
+
+#### 6. Configurer l'application Discord
 
 1. Rendez-vous sur le [Portail Développeurs Discord](https://discord.com/developers/applications)
 2. Créez une nouvelle application (ex: "JobHunterAI")
 3. Dans l'onglet "Bot", créez un bot et copiez son token
-4. Activez l'intention "Message Content" dans les paramètres du bot
+4. Activez les intents "Server Members" et "Message Content" dans les paramètres du bot
 5. Dans OAuth2 > URL Generator:
    - Cochez les scopes "bot" et "applications.commands"
-   - Sélectionnez les permissions: "Send Messages", "Embed Links", "Attach Files"
+   - Sélectionnez les permissions appropriées (Admin recommandé pour les tests)
    - Utilisez l'URL générée pour inviter le bot sur votre serveur de test
 
-#### 6. Lancer le bot
+#### 7. Lancer le bot
 ```bash
 python bot.py
 ```
@@ -214,9 +225,9 @@ Cette commande permet de rechercher des offres d'emploi ou d'alternance correspo
 - `termes` (obligatoire): Mots-clés décrivant le poste recherché (ex: "data scientist", "développeur python")
 - `lieu` (optionnel): Localisation souhaitée (ville, région, département)
 
-**Exemple**: `/scrape data analyst lieu:Paris`
+**Exemple**: `/scrape data analyst lieu:Lyon`
 
-**Résultat**: Le bot affiche une liste d'offres correspondantes avec:
+**Résultat**: Le bot affiche une liste d'offres correspondantes combinant France Travail et Indeed avec:
 - Titre du poste
 - Nom de l'entreprise
 - Localisation
@@ -224,17 +235,31 @@ Cette commande permet de rechercher des offres d'emploi ou d'alternance correspo
 
 Un menu déroulant permet de sélectionner l'offre qui vous intéresse pour les étapes suivantes.
 
-### Analyser un CV PDF (`/analyser_cv`)
+### Rechercher des stages (`/scrape_stage`)
 
-Cette commande permet d'extraire et d'analyser les informations clés de votre CV.
+Cette commande est spécifiquement conçue pour rechercher des offres de stage.
 
-**Syntaxe**: `/analyser_cv`
+**Syntaxe**: `/scrape_stage [lieu]`
+
+**Paramètres**:
+- `lieu` (optionnel): Localisation souhaitée (ville, région), Paris par défaut
+
+**Exemple**: `/scrape_stage lyon`
+
+**Résultat**: Le bot affiche une liste de stages disponibles dans la localisation spécifiée, avec des informations similaires aux recherches d'emploi.
+
+### Télécharger et analyser un CV (`/telecharger_cv`)
+
+Cette commande permet de télécharger et d'analyser votre CV.
+
+**Syntaxe**: `/telecharger_cv`
 
 **Procédure**:
 1. Exécutez la commande
 2. Le bot vous invite à téléverser un fichier
-3. Uploadez votre CV au format PDF
-4. Patientez pendant l'analyse (quelques secondes)
+3. Uploadez votre CV au format PDF. Vous pouvez utilisez `parse_cv_mistral`ou `parse_cv_gemini` pour obtenir votre CV en format json
+4. Le CV est stocké temporairement
+5. Utilisez `/extraire_cv_mistral` ou `/extraire_cv_gemini` pour l'analyse
 
 **Résultat**: Le bot affiche un résumé structuré de votre CV avec:
 - Informations personnelles (nom, contact)
@@ -243,17 +268,18 @@ Cette commande permet d'extraire et d'analyser les informations clés de votre C
 - Formation et diplômes
 - Langues et certifications
 
-Ces informations sont stockées temporairement pour les commandes suivantes.
+Ces informations sont stockées pour les commandes suivantes.
 
-### Comparer le CV avec une offre (`/comparer_cv_offre`)
 
-Cette commande évalue l'adéquation entre votre profil et une offre d'emploi sélectionnée.
+### Analyser la compatibilité CV/offre (`/analyser_cv_offre`)
 
-**Syntaxe**: `/comparer_cv_offre`
+Cette commande évalue l'adéquation entre votre profil et une offre d'emploi sélectionnée. Elle utilise des modèles de langage pour une analyse détaillée.
+
+**Syntaxe**: `/analyser_cv_offre`
 
 **Prérequis**:
-- Avoir sélectionné une offre via `/scrape`
-- Avoir analysé votre CV via `/analyser_cv`
+- Avoir téléchargé et analysé votre CV
+- Avoir sélectionné une offre d'emploi
 
 **Résultat**: Le bot affiche:
 - Un pourcentage de correspondance global
@@ -263,15 +289,29 @@ Cette commande évalue l'adéquation entre votre profil et une offre d'emploi s�
 
 Cette analyse vous aide à décider si l'offre correspond à votre profil et comment adapter votre candidature pour maximiser vos chances.
 
+### Ajouter des informations pour la lettre (`/infos_lettre_g5`)
+
+Cette commande vous permet d'ajouter des informations supplémentaires pour personnaliser votre lettre de motivation.
+
+**Syntaxe**: `/infos_lettre_g5`
+
+**Informations demandées**:
+- Pourquoi cette entreprise vous intéresse
+- Vos disponibilités
+- Autres informations personnelles pertinentes
+
+**Résultat**: Ces informations sont stockées et utilisées pour enrichir la lettre de motivation générée.
+
 ### Générer une lettre de motivation (`/generer_lettre`)
 
 Cette commande produit une lettre de motivation personnalisée pour l'offre sélectionnée.
 
-**Syntaxe**: `/generer_lettre`
+**Syntaxe**: `/generer_lettre` ou `/generer_lettre_g5` (version améliorée du Groupe 5)
 
 **Prérequis**:
-- Avoir sélectionné une offre via `/scrape`
-- Avoir analysé votre CV via `/analyser_cv`
+- Avoir téléchargé et analysé votre CV
+- Avoir sélectionné une offre d'emploi
+- (Optionnel) Avoir fourni des informations supplémentaires via `/infos_lettre_g5`
 
 **Résultat**: Le bot génère:
 - Un fichier texte contenant la lettre de motivation complète
@@ -285,31 +325,6 @@ La lettre générée respecte les conventions professionnelles:
 
 Il vous suffit de télécharger le fichier, d'y apporter vos dernières touches personnelles et de l'inclure dans votre candidature.
 
-## 📸 Captures d'écran
-
-### Recherche d'offres d'emploi
-<div align="center">
-  <img src="/api/placeholder/700/350" alt="Capture d'écran - Recherche d'offres" />
-  <p><em>Résultats de recherche pour "data" avec sélecteur d'offre</em></p>
-</div>
-
-### Analyse de CV
-<div align="center">
-  <img src="/api/placeholder/700/350" alt="Capture d'écran - Analyse de CV" />
-  <p><em>Résultat de l'analyse d'un CV au format PDF</em></p>
-</div>
-
-### Comparaison CV-Offre
-<div align="center">
-  <img src="/api/placeholder/700/350" alt="Capture d'écran - Comparaison CV-Offre" />
-  <p><em>Évaluation de l'adéquation entre profil et offre (78% de correspondance)</em></p>
-</div>
-
-### Génération de lettre de motivation
-<div align="center">
-  <img src="/api/placeholder/700/350" alt="Capture d'écran - Lettre de motivation" />
-  <p><em>Génération d'une lettre de motivation personnalisée</em></p>
-</div>
 
 ## 🛠️ Choix techniques et bonnes pratiques
 
@@ -327,31 +342,56 @@ Il vous suffit de télécharger le fichier, d'y apporter vos dernières touches 
 
 ### Gestion des données utilisateur
 - **Stockage temporaire en mémoire**: Conservation du contexte entre commandes
-- **Pas de persistance sensible**: Données effacées à la fermeture du bot
+- **Structure de données centralisée**: Classe `UserData` pour stocker les informations utilisateur
 - **Sécurité des informations**: CV et analyses visibles uniquement par l'utilisateur concerné
 - **Variables d'environnement**: Gestion sécurisée des tokens et clés d'API
 
+### Multi-source pour les offres d'emploi
+- **France Travail API**: Utilisation de l'API officielle avec authentification
+- **Indeed via jobspy**: Scraping optimisé avec gestion des erreurs
+- **Combinaison des résultats**: Présentation unifiée des offres de différentes sources
+- **Filtrage intelligent**: Recherche par mots-clés et localisation
+
 ### Intégration de l'IA
-- **Modèles de langage avancés**: Mistral AI et Google Gemini pour l'analyse sémantique
+- **Google Gemini**: Utilisation de l'API Gemini pour l'analyse et la génération de contenu
 - **Prompts optimisés**: Instructions précises pour obtenir des résultats structurés
 - **Extraction intelligente**: Identification des informations clés indépendamment du format
 - **Génération de contenu**: Production de textes cohérents et personnalisés
 
 ### Robustesse et expérience utilisateur
 - **Gestion des erreurs**: Messages clairs en cas de problème ou d'étape manquante
-- **Retours visuels**: Indicateurs de chargement pendant les opérations longues
+- **Logging détaillé**: Enregistrement des actions et erreurs pour faciliter le débogage
 - **Guide utilisateur**: Instructions et suggestions pour une utilisation optimale
 - **Documentation complète**: Description détaillée des commandes et fonctionnalités
 
 ## 👥 Équipe et contributions
 
-Ce projet a été réalisé par les étudiants du Master 1 DS2E de l'Université de Strasbourg, organisés en cinq groupes de travail:
+Ce projet a été réalisé par les étudiants du Master 1 DS2E de la Faculté des sciences économiques et de gestion de Strasbourg, organisés en cinq groupes de travail:
 
-- **Groupe 1**: Intégration Discord & Interface utilisateur
-- **Groupe 2**: Scraping d'offres sur France Travail
-- **Groupe 3**: Scraping d'offres sur Indeed
-- **Groupe 4**: Analyse de CV PDF
-- **Groupe 5**: Matching CV-Offre & Génération de lettre
+### Groupe 1: Intégration Discord & Interface utilisateur
+- Développement du bot principal et coordination
+- Intégration des différents modules
+- Interface utilisateur et expérience globale
+
+### Groupe 2: Scraping d'offres sur France Travail
+- Développement de l'API France Travail
+- Gestion des requêtes et authentification
+- Extraction et formatage des offres d'emploi
+
+### Groupe 3: Scraping d'offres sur Indeed
+- Développement du scraping Indeed
+- Recherche d'offres d'emploi et de stages
+- Extraction des URLs et informations pertinentes
+
+### Groupe 4: Analyse de CV PDF
+- Extraction du texte des PDF
+- Analyse structurée des informations
+- Formatage des données pour l'utilisation par le bot
+
+### Groupe 5: Matching CV-Offre & Génération de lettre
+- Analyse de compatibilité entre CV et offres
+- Génération de lettres de motivation personnalisées
+- Intégration avec Google Gemini API
 
 Nous remercions particulièrement les encadrants du projet pour leur soutien et leurs conseils tout au long du développement.
 
@@ -363,7 +403,7 @@ Le projet JobHunterAI pourrait être enrichi par les fonctionnalités suivantes:
 - **Système de profils persistants**: Sauvegarde des CV et préférences utilisateurs
 - **Dashboard statistique**: Visualisation des tendances du marché de l'emploi
 - **Assistant de préparation d'entretien**: Questions probables basées sur l'offre
-- **Intégration d'APIs officielles**: Connexion directe aux plateformes d'emploi
+- **Intégration d'APIs officielles supplémentaires**: Connexion à davantage de plateformes d'emploi
 - **Suivi de candidatures**: Gestion du statut des postulations envoyées
 - **Recommandations de formation**: Suggestions pour combler les lacunes identifiées
 
@@ -377,7 +417,7 @@ Ce projet est distribué sous licence MIT. Il a été développé dans un cadre 
 
 <div align="center">
   <p>
-    <strong>JobHunterAI</strong> — Développé avec 💻 et ☕ par les étudiants du Master 1 DS2E<br>
-    Université de Strasbourg — 2024-2025
+    <strong>JobHunterAI</strong> — Développé par les étudiants du Master 1 DS2E<br>
+    Faculté des sciences économiques et de gestion de Strasbourg — 2024-2025
   </p>
 </div>
